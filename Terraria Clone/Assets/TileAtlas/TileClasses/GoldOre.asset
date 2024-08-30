@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f29aff555697b4ab8391a8a5968bbb, type: 3}
+  m_Name: GoldOre
+  m_EditorClassIdentifier: 
+  tileName: gold
+  tileSprites:
+  - {fileID: 21300000, guid: 9b259cd156df79b42b3dd17c1f24da3f, type: 3}
+  - {fileID: 21300000, guid: 4b185b5848fedd74cb97455d92282160, type: 3}
