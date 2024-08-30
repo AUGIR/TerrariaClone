@@ -21,20 +21,20 @@ public class ProceduralGeneration : MonoBehaviour
     public bool generateFlatBiomes;
 
     [Header("Generation Settings")]
+    [Range(-10000f, 10000f)] public float seed;
+    public bool generateRandomSeed;
     public bool generateCaves;
-    public List<Vector2> worldTiles = new List<Vector2>();
+    private List<Vector2> worldTiles = new List<Vector2>();
 
     [Header("Noise Settings")]
     public Texture2D caveNoiseTexture;
-    [Range(-10000f, 10000f)] public float seed;
-    public bool generateRandomSeed;
 
     [Header("Tile Atlas")]
     public TileAtlas tileAtlas;
     public Cactus cactus;
     private BiomeClass curBiome;
 
-    public Color[] biomeCols;
+    private Color[] biomeCols;
 
     private void OnValidate()
     {
