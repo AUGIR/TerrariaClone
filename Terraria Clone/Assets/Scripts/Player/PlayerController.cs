@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public bool onGround;
     public Vector2 spawnPos;
+    public bool hit;
+
     private float horizontal;
     private Rigidbody2D rb;
     private Animator anim;
@@ -42,6 +44,8 @@ public class PlayerController : MonoBehaviour
         float jump = Input.GetAxisRaw("Jump");
         float vertical = Input.GetAxisRaw("Vertical");
 
+        hit = Input.GetMouseButton(0);
+
         Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
         if (horizontal < 0)
         {
@@ -67,5 +71,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         anim.SetFloat("horizontal", horizontal);
+        anim.SetBool("hit", hit);
     }
 }
