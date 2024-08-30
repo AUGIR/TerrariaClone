@@ -26,6 +26,7 @@ public class ProceduralGeneration : MonoBehaviour
     public bool generateRandomSeed;
     public bool generateCaves;
     private List<Vector2> worldTiles = new List<Vector2>();
+    private List<GameObject> worldTileObjects = new List<GameObject>();
 
     [Header("Noise Settings")]
     public Texture2D caveNoiseTexture;
@@ -388,6 +389,14 @@ public class ProceduralGeneration : MonoBehaviour
 
     }
 
+    public void RemoveTile(int x, int y)
+    {
+        if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
+        {
+            Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
+        }
+    }
+
     public void PlaceTile(Sprite[] tileSprites, int x, int y, bool isBackgroundElement)
     {
         if (!worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
@@ -414,6 +423,7 @@ public class ProceduralGeneration : MonoBehaviour
             newTile.transform.position = new Vector2(x + 0.5f, y + 0.5f);
 
             worldTiles.Add(newTile.transform.position - (Vector3.one * 0.5f));
+            worldTileObjects.Add(newTile);
 
         }
     }

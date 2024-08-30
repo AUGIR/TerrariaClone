@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Vector2Int mousePos;
     public float moveSpeed;
     public float jumpForce;
     public bool onGround;
     public Vector2 spawnPos;
     public bool hit;
+    public ProceduralGeneration proceduralGenerator;
 
+    public Camera cam;
     private float horizontal;
     private Rigidbody2D rb;
     private Animator anim;
@@ -19,6 +22,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
+        
         GetComponent<Transform>().position = spawnPos;
     }
 
@@ -38,6 +42,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
+        mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
+        anim.SetFloat("horizontal", horizontal);
+        anim.SetBool("hit", hit);
+    }
+
     private void FixedUpdate()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -45,6 +57,11 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
 
         hit = Input.GetMouseButton(0);
+
+        if (hit)
+        {
+            proceduralGenerator.RemoveTile(mousePos.x, mousePos.y);
+        }
 
         Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
         if (horizontal < 0)
@@ -68,9 +85,4 @@ public class PlayerController : MonoBehaviour
         rb.velocity = movement;
     }
 
-    private void Update()
-    {
-        anim.SetFloat("horizontal", horizontal);
-        anim.SetBool("hit", hit);
-    }
 }
