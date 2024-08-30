@@ -155,15 +155,6 @@ public class ProceduralGeneration : MonoBehaviour
 
     public BiomeClass GetCurrentBiome(int x, int y)
     {
-/*        for (int i = 0; i < biomes.Length; i++)
-        {
-            if (biomes[i].biomeCol == biomeMap.GetPixel(x, y))
-            {
-                return biomes[i];
-            }
-        }
-
-        return curBiome;*/
 
         if(System.Array.IndexOf(biomeCols, biomeMap.GetPixel(x, y)) >= 0)
         {
