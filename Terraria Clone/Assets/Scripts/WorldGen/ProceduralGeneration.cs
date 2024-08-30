@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProceduralGeneration : MonoBehaviour
 {
+    public PlayerController player;
     public BiomeClass[] biomes;
     public bool syncBiomeOres;
 
@@ -78,6 +79,7 @@ public class ProceduralGeneration : MonoBehaviour
 
         CreateChunks();
         GenerateTerrain();
+        player.Spawn();
 
     }
 
@@ -240,6 +242,11 @@ public class ProceduralGeneration : MonoBehaviour
                 curBiome = GetCurrentBiome(x, y);
                 height = Mathf.PerlinNoise((x + seed) * curBiome.terrainFreq, seed * curBiome.terrainFreq) * curBiome.heightMultiplier + heightAddition;
 
+                if (x == worldSize / 2)
+                {
+                    player.spawnPos = new Vector2(x, height + 2);
+                }
+
                 if (y >= height)
                     break;
                     
@@ -383,7 +390,7 @@ public class ProceduralGeneration : MonoBehaviour
 
     public void PlaceTile(Sprite[] tileSprites, int x, int y, bool isBackgroundElement)
     {
-        if (!worldTiles.Contains(new Vector2Int(x, y)))
+        if (!worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             GameObject newTile = new GameObject();
 
@@ -395,6 +402,7 @@ public class ProceduralGeneration : MonoBehaviour
             newTile.AddComponent<SpriteRenderer>();
             if (!isBackgroundElement)
             {
+                newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
                 newTile.AddComponent<BoxCollider2D>();
                 newTile.GetComponent<BoxCollider2D>().size = new Vector2(1, 1);
                 newTile.tag = "Ground";

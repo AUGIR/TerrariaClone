@@ -7,14 +7,17 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
     public bool onGround;
+    public Vector2 spawnPos;
     private float horizontal;
     private Rigidbody2D rb;
     private Animator anim;
 
-    private void Start()
+    public void Spawn()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        GetComponent<Transform>().position = spawnPos;
     }
 
     private void OnTriggerStay2D(Collider2D col)
