@@ -539,9 +539,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630ff24d53d5ea148ab8b48f9a3857e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedTile: {fileID: 11400000, guid: 7a185d6c99dad3149ae8838acec1e417, type: 2}
+  mousePos: {x: 0, y: 0}
   moveSpeed: 5
   jumpForce: 12
   onGround: 0
+  spawnPos: {x: 0, y: 0}
+  place: 0
+  hit: 0
+  reachRange: 6
+  proceduralGenerator: {fileID: 0}
+  cam: {fileID: 0}
 --- !u!95 &7342648206059361325
 Animator:
   serializedVersion: 5

@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
         hit = Input.GetMouseButton(0);
         place = Input.GetMouseButton(1);
 
-        if (Vector2.Distance(transform.position, mousePos) <= reachRange && Vector2.Distance(transform.position, mousePos) > 1f)
+        if (Vector2.Distance(transform.position, mousePos) <= reachRange)
         {
             if (hit)
             {
