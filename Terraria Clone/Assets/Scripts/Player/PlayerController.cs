@@ -42,13 +42,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
-        mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
-        anim.SetFloat("horizontal", horizontal);
-        anim.SetBool("hit", hit);
-    }
+
 
     private void FixedUpdate()
     {
@@ -83,6 +77,18 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.velocity = movement;
+        mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
+        mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
+        anim.SetFloat("horizontal", horizontal);
+        anim.SetBool("hit", hit);
+    }
+
+    private void Update()
+    {
+/*        mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
+        mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
+        anim.SetFloat("horizontal", horizontal);
+        anim.SetBool("hit", hit);*/
     }
 
 }

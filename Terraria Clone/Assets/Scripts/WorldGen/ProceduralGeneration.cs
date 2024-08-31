@@ -6,7 +6,7 @@ public class ProceduralGeneration : MonoBehaviour
 {
     public PlayerController player;
     public BiomeClass[] biomes;
-    public bool syncBiomeOres;
+    public Camera cam;
 
     [Header("General World Settings")]
     [Range(0f, 10000f)] public int worldSize = 100;
@@ -18,7 +18,9 @@ public class ProceduralGeneration : MonoBehaviour
     [Header("Biomes")]
     public float biomeFrequency;
     public Gradient biomeGradient;
+    [HideInInspector]
     public Texture2D biomeMap;
+
     public bool generateFlatBiomes;
 
     [Header("Generation Settings")]
@@ -29,6 +31,7 @@ public class ProceduralGeneration : MonoBehaviour
     private List<GameObject> worldTileObjects = new List<GameObject>();
 
     [Header("Noise Settings")]
+    [HideInInspector]
     public Texture2D caveNoiseTexture;
 
     [Header("Tile Atlas")]
@@ -44,13 +47,6 @@ public class ProceduralGeneration : MonoBehaviour
         {
             seed = Random.Range(-10000, 10000);
         }
-
-
-
-
-
-
-
 
         biomeCols = new Color[biomes.Length];
         for (int i = 0; i < biomes.Length; i++)
@@ -84,24 +80,25 @@ public class ProceduralGeneration : MonoBehaviour
 
     }
 
-/*    public void DrawBiomeMap()
+    public void RefreshChunks()
     {
-        float b;
-        Color col;
-
-        for (int x = 0; x < worldSize; x++)
+        for (int i = 0; i < worldChunks.Length; i++)
         {
-            for (int y = 0; y < worldSize; y++)
+            if (Vector2.Distance(new Vector2((i * chunkSize) + (chunkSize / 2), 0), new Vector2(player.transform.position.x, 0)) > cam.orthographicSize * 4f)
             {
-                b = Mathf.PerlinNoise((x + seed) * biomeFrequency, seed * biomeFrequency);
-                col = biomeGradient.Evaluate(b);
-                biomeMap.SetPixel(x, y, col);
+                worldChunks[i].SetActive(false);
+            }
+            else
+            {
+                worldChunks[i].SetActive(true);
             }
         }
+    }
 
-
-        biomeMap.Apply();
-    }*/
+    public void Update()
+    {
+        RefreshChunks();
+    }
 
     public void DrawCaves()
     {
