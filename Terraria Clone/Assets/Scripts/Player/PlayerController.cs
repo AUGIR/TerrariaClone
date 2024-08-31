@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 spawnPos;
     public bool place;
     public bool hit;
+    public int reachRange;
     public ProceduralGeneration proceduralGenerator;
 
     public Camera cam;
@@ -55,14 +56,18 @@ public class PlayerController : MonoBehaviour
         hit = Input.GetMouseButton(0);
         place = Input.GetMouseButton(1);
 
-        if (hit)
+        if (Vector2.Distance(transform.position, mousePos) < reachRange)
         {
-            proceduralGenerator.RemoveTile(mousePos.x, mousePos.y);
+            if (hit)
+            {
+                proceduralGenerator.RemoveTile(mousePos.x, mousePos.y);
+            }
+            else if (place)
+            {
+                proceduralGenerator.PlaceTile(selectedTile.tileSprites, mousePos.x, mousePos.y, false);
+            }
         }
-        else if (place)
-        {
-            proceduralGenerator.PlaceTile(selectedTile.tileSprites, mousePos.x, mousePos.y, false);
-        }
+
 
         Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
         if (horizontal < 0)
