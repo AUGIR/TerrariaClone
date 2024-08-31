@@ -29,6 +29,7 @@ public class ProceduralGeneration : MonoBehaviour
     public bool generateCaves;
     private List<Vector2> worldTiles = new List<Vector2>();
     private List<GameObject> worldTileObjects = new List<GameObject>();
+    private List<TileClass> worldTileClasses = new List<TileClass>();
 
     [Header("Noise Settings")]
     [HideInInspector]
@@ -230,7 +231,7 @@ public class ProceduralGeneration : MonoBehaviour
 
     public void GenerateTerrain()
     {
-        Sprite[] tileSprites;
+        TileClass tileClass;
         for (int x = 0; x < worldSize; x++)
         {
 
@@ -252,26 +253,26 @@ public class ProceduralGeneration : MonoBehaviour
                     if (y < height - curBiome.dirtLayerHeight)
                     {
 
-                        tileSprites =  curBiome.tileAtlas.stone.tileSprites;
+                        tileClass =  curBiome.tileAtlas.stone;
                         if (curBiome.ores[4].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > curBiome.ores[4].maxSpawnHeight)
                         {
-                            tileSprites = curBiome.tileAtlas.dirt.tileSprites;
+                            tileClass = curBiome.tileAtlas.dirt;
                         }
                         if (curBiome.ores[0].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > curBiome.ores[0].maxSpawnHeight)
                         {
-                            tileSprites = tileAtlas.coal.tileSprites;
+                            tileClass = tileAtlas.coal;
                         }
                         if (curBiome.ores[1].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > curBiome.ores[1].maxSpawnHeight)
                         {
-                            tileSprites = tileAtlas.iron.tileSprites;
+                            tileClass = tileAtlas.iron;
                         }
                         if (curBiome.ores[2].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > curBiome.ores[2].maxSpawnHeight)
                         {
-                            tileSprites = tileAtlas.gold.tileSprites;
+                            tileClass = tileAtlas.gold;
                         }
                         if (curBiome.ores[3].spreadTexture.GetPixel(x, y).r > 0.5f && height - y > curBiome.ores[3].maxSpawnHeight)
                         {
-                            tileSprites = tileAtlas.diamond.tileSprites;
+                            tileClass = tileAtlas.diamond;
                         }
 
 
@@ -279,11 +280,11 @@ public class ProceduralGeneration : MonoBehaviour
                     }
                     else if (y < height - 1)
                     {
-                        tileSprites = curBiome.tileAtlas.dirt.tileSprites;
+                        tileClass = curBiome.tileAtlas.dirt;
                     }
                     else
                     {
-                        tileSprites = curBiome.tileAtlas.grass.tileSprites;
+                        tileClass = curBiome.tileAtlas.grass;
 
                     }
 
@@ -291,12 +292,12 @@ public class ProceduralGeneration : MonoBehaviour
                     {
                         if (caveNoiseTexture.GetPixel(x, y).r > 0.5f)
                         {
-                            PlaceTile(tileSprites, x, y, false);
+                            PlaceTile(tileClass, x, y, false);
                         }
                     }
                     else
                     {
-                        PlaceTile(tileSprites, x, y, false);
+                        PlaceTile(tileClass, x, y, false);
                     }
 
                     if (y >= height - 1)
@@ -316,7 +317,7 @@ public class ProceduralGeneration : MonoBehaviour
                             {
                                 if (curBiome.tileAtlas.tallGrass != null)
                                 {
-                                    PlaceTile(curBiome.tileAtlas.tallGrass.tileSprites, x, y + 1, true);
+                                    PlaceTile(curBiome.tileAtlas.tallGrass, x, y + 1, true);
                                 }
 
                             }
@@ -347,31 +348,31 @@ public class ProceduralGeneration : MonoBehaviour
     {
         for (int i = 0; i <= treeHeight; i++)
         {
-            PlaceTile(this.tileAtlas.log.tileSprites, x, y + i, true);
+            PlaceTile(this.tileAtlas.log, x, y + i, true);
         }
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 1, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 2, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 3, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x, y + treeHeight + 4, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 3, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 4, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight + 1, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 2, y + treeHeight + 1, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 3, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x + 2, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x + 3, y + treeHeight + 1, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight + 2, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 2, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x + 2, y + treeHeight + 2, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x + 1, y + treeHeight + 3, true);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 3, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight + 1, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 2, y + treeHeight + 1, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 3, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x - 2, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x - 3, y + treeHeight + 1, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight + 2, true);
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 2, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x - 2, y + treeHeight + 2, true);
 
-        PlaceTile(tileAtlas.leaf.tileSprites, x - 1, y + treeHeight + 3, true);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 3, true);
 
     }
 
@@ -379,10 +380,10 @@ public class ProceduralGeneration : MonoBehaviour
     {
         for (int i = 0; i <= cactusHeight; i++)
         {
-            PlaceTile(cactus.cactus.tileSprites, x, y + i, true);
+            PlaceTile(cactus.cactus, x, y + i, true);
         }
 
-        PlaceTile(cactus.cactusTop.tileSprites, x, y + cactusHeight + 1, true);
+        PlaceTile(cactus.cactusTop, x, y + cactusHeight + 1, true);
 
     }
 
@@ -391,15 +392,37 @@ public class ProceduralGeneration : MonoBehaviour
         if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
+
             worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
+            worldTileClasses.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
             worldTiles.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
         }
     }
 
-    public void PlaceTile(Sprite[] tileSprites, int x, int y, bool isBackgroundElement)
+    public void CheckTile(TileClass tile, int x, int y, bool backgroundElement)
     {
-        if (!worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
+        if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
+            if (!worldTiles.Contains(new Vector2Int(x, y)))
+            {
+                PlaceTile(tile, x, y, backgroundElement);
+            }
+            else
+            {
+                if (worldTileClasses[worldTiles.IndexOf(new Vector2Int(x, y))].inBackground)
+                {
+                    RemoveTile(x, y);
+                    PlaceTile(tile, x, y, backgroundElement);
+                }
+            }
+        }
+    }
+
+    public void PlaceTile(TileClass tile, int x, int y, bool backgroundElement)
+    {
+        if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
+        {
+
             GameObject newTile = new GameObject();
 
             int chunkCoord = Mathf.RoundToInt(Mathf.Round(x / chunkSize) * chunkSize);
@@ -408,22 +431,30 @@ public class ProceduralGeneration : MonoBehaviour
             newTile.transform.parent = worldChunks[(int)chunkCoord].transform;
 
             newTile.AddComponent<SpriteRenderer>();
-            if (!isBackgroundElement)
+            if (!backgroundElement)
             {
-                newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
                 newTile.AddComponent<BoxCollider2D>();
                 newTile.GetComponent<BoxCollider2D>().size = new Vector2(1, 1);
                 newTile.tag = "Ground";
             }
 
-            int spriteIndex = Random.Range(0, tileSprites.Length);
-            newTile.GetComponent<SpriteRenderer>().sprite = tileSprites[spriteIndex];
-            newTile.name = tileSprites[0].name;
+            if (tile.inBackground)
+            {
+                newTile.GetComponent<SpriteRenderer>().sortingOrder = -10;
+            }
+            else
+            {
+                newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
+            }
+
+            int spriteIndex = Random.Range(0, tile.tileSprites.Length);
+            newTile.GetComponent<SpriteRenderer>().sprite = tile.tileSprites[spriteIndex];
+            newTile.name = tile.tileSprites[0].name;
             newTile.transform.position = new Vector2(x + 0.5f, y + 0.5f);
 
             worldTiles.Add(newTile.transform.position - (Vector3.one * 0.5f));
             worldTileObjects.Add(newTile);
-
+            worldTileClasses.Add(tile);
         }
     }
 }
