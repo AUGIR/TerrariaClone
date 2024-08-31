@@ -391,6 +391,8 @@ public class ProceduralGeneration : MonoBehaviour
         if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
+            worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
+            worldTiles.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
         }
     }
 

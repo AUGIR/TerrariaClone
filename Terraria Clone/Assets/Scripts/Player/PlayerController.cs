@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public TileClass selectedTile;
     public Vector2Int mousePos;
     public float moveSpeed;
     public float jumpForce;
     public bool onGround;
     public Vector2 spawnPos;
+    public bool place;
     public bool hit;
     public ProceduralGeneration proceduralGenerator;
 
@@ -51,10 +53,15 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
 
         hit = Input.GetMouseButton(0);
+        place = Input.GetMouseButton(1);
 
         if (hit)
         {
             proceduralGenerator.RemoveTile(mousePos.x, mousePos.y);
+        }
+        else if (place)
+        {
+            proceduralGenerator.PlaceTile(selectedTile.tileSprites, mousePos.x, mousePos.y, false);
         }
 
         Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
@@ -77,18 +84,15 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.velocity = movement;
-        mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
-        mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
-        anim.SetFloat("horizontal", horizontal);
-        anim.SetBool("hit", hit);
+
     }
 
     private void Update()
     {
-/*        mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
+        mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
         mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
         anim.SetFloat("horizontal", horizontal);
-        anim.SetBool("hit", hit);*/
+        anim.SetBool("hit", hit || place);
     }
 
 }
