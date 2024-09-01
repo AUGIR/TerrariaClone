@@ -22,5 +22,6 @@ MonoBehaviour:
   grass: {fileID: 11400000, guid: 4ef3c936f8c8e7248a98d2ec587d2f92, type: 2}
   log: {fileID: 11400000, guid: c069895dc3273aa4d87f0291c80fef89, type: 2}
   leaf: {fileID: 11400000, guid: 2ab5588547b2c1547ab2f8ba99fc4c14, type: 2}
+  stoneWall: {fileID: 11400000, guid: 8bd12b691b8aff3428fa028f7664ca49, type: 2}
   snow: {fileID: 11400000, guid: 4ef3c936f8c8e7248a98d2ec587d2f92, type: 2}
   sand: {fileID: 0}

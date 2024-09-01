@@ -49,12 +49,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        horizontal = Input.GetAxis("Horizontal");
         float jump = Input.GetAxisRaw("Jump");
         float vertical = Input.GetAxisRaw("Vertical");
 
-        hit = Input.GetMouseButton(0);
-        place = Input.GetMouseButton(1);
+
 
         if (Vector2.Distance(transform.position, mousePos) <= reachRange)
         {
@@ -64,7 +63,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (place)
             {
-                proceduralGenerator.CheckTile(selectedTile, mousePos.x, mousePos.y, false);
+                proceduralGenerator.CheckTile(selectedTile, mousePos.x, mousePos.y);
             }
         }
 
@@ -94,6 +93,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        hit = Input.GetMouseButtonDown(0);
+        place = Input.GetMouseButton(1);
+
         mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
         mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
         anim.SetFloat("horizontal", horizontal);

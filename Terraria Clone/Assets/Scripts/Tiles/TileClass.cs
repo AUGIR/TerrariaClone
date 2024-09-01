@@ -6,7 +6,7 @@ using UnityEngine;
 public class TileClass : ScriptableObject
 {
     public string tileName;
-    //public Sprite tileSprite;
+    public TileClass wallVariant;
     public Sprite[] tileSprites;
     public int tileDropChance = 1;
     public bool inBackground = true;

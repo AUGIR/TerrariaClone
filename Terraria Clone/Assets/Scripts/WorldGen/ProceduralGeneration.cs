@@ -295,6 +295,10 @@ public class ProceduralGeneration : MonoBehaviour
                         {
                             PlaceTile(tileClass, x, y);
                         }
+                        else if(tileClass.wallVariant != null)
+                        {
+                            PlaceTile(tileClass.wallVariant, x, y);
+                        }
                     }
                     else
                     {
@@ -392,8 +396,12 @@ public class ProceduralGeneration : MonoBehaviour
     {
         if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
+
+            if (worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant != null)
+            {
+                PlaceTile(worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant, x, y);
+            }
             int t = Random.Range(1, worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].tileDropChance);
-            Debug.Log(t);
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
             if (t == 1)
             {
@@ -404,10 +412,11 @@ public class ProceduralGeneration : MonoBehaviour
             worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
             worldTileClasses.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
             worldTiles.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
+
         }
     }
 
-    public void CheckTile(TileClass tile, int x, int y, bool backgroundElement)
+    public void CheckTile(TileClass tile, int x, int y)
     {
         if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
@@ -455,6 +464,11 @@ public class ProceduralGeneration : MonoBehaviour
             else
             {
                 newTile.GetComponent<SpriteRenderer>().sortingOrder = -5;
+            }
+
+            if (tile.name.ToUpper().Contains("WALL"))
+            {
+                newTile.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
             }
 
             int spriteIndex = Random.Range(0, tile.tileSprites.Length);
