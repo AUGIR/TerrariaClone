@@ -10,4 +10,5 @@ public class TileClass : ScriptableObject
     public Sprite[] tileSprites;
     public int tileDropChance = 1;
     public bool inBackground = true;
+    public bool naturallyPlaced = false;
 }

@@ -293,16 +293,16 @@ public class ProceduralGeneration : MonoBehaviour
                     {
                         if (caveNoiseTexture.GetPixel(x, y).r > 0.5f)
                         {
-                            PlaceTile(tileClass, x, y);
+                            PlaceTile(tileClass, x, y, true);
                         }
                         else if(tileClass.wallVariant != null)
                         {
-                            PlaceTile(tileClass.wallVariant, x, y);
+                            PlaceTile(tileClass.wallVariant, x, y, true);
                         }
                     }
                     else
                     {
-                        PlaceTile(tileClass, x, y);
+                        PlaceTile(tileClass, x, y, true);
                     }
 
                     if (y >= height - 1)
@@ -322,7 +322,7 @@ public class ProceduralGeneration : MonoBehaviour
                             {
                                 if (curBiome.tileAtlas.tallGrass != null)
                                 {
-                                    PlaceTile(curBiome.tileAtlas.tallGrass, x, y + 1);
+                                    PlaceTile(curBiome.tileAtlas.tallGrass, x, y + 1, true);
                                 }
 
                             }
@@ -353,31 +353,31 @@ public class ProceduralGeneration : MonoBehaviour
     {
         for (int i = 0; i <= treeHeight; i++)
         {
-            PlaceTile(this.tileAtlas.log, x, y + i);
+            PlaceTile(this.tileAtlas.log, x, y + i, true);
         }
 
-        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 1);
-        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 2);
-        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 3);
-        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 4);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 3, true);
+        PlaceTile(tileAtlas.leaf, x, y + treeHeight + 4, true);
 
-        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 1);
-        PlaceTile(tileAtlas.leaf, x + 2, y + treeHeight + 1);
-        PlaceTile(tileAtlas.leaf, x + 3, y + treeHeight + 1);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x + 2, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x + 3, y + treeHeight + 1, true);
 
-        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 2);
-        PlaceTile(tileAtlas.leaf, x + 2, y + treeHeight + 2);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x + 2, y + treeHeight + 2, true);
 
-        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 3);
+        PlaceTile(tileAtlas.leaf, x + 1, y + treeHeight + 3, true);
 
-        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 1);
-        PlaceTile(tileAtlas.leaf, x - 2, y + treeHeight + 1);
-        PlaceTile(tileAtlas.leaf, x - 3, y + treeHeight + 1);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x - 2, y + treeHeight + 1, true);
+        PlaceTile(tileAtlas.leaf, x - 3, y + treeHeight + 1, true);
 
-        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 2);
-        PlaceTile(tileAtlas.leaf, x - 2, y + treeHeight + 2);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 2, true);
+        PlaceTile(tileAtlas.leaf, x - 2, y + treeHeight + 2, true);
 
-        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 3);
+        PlaceTile(tileAtlas.leaf, x - 1, y + treeHeight + 3, true);
 
     }
 
@@ -385,28 +385,33 @@ public class ProceduralGeneration : MonoBehaviour
     {
         for (int i = 0; i <= cactusHeight; i++)
         {
-            PlaceTile(cactus.cactus, x, y + i);
+            PlaceTile(cactus.cactus, x, y + i, true);
         }
 
-        PlaceTile(cactus.cactusTop, x, y + cactusHeight + 1);
+        PlaceTile(cactus.cactusTop, x, y + cactusHeight + 1, true);
 
     }
 
     public void RemoveTile(int x, int y)
     {
+        TileClass tile = worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))];
         if (worldTiles.Contains(new Vector2Int(x, y)) && x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
 
-            if (worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant != null)
+            if (tile.wallVariant != null)
             {
-                PlaceTile(worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].wallVariant, x, y);
+                if (tile.naturallyPlaced)
+                {
+                    PlaceTile(tile.wallVariant, x, y, true);
+                }
+               
             }
-            int t = Random.Range(1, worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].tileDropChance);
+            int t = Random.Range(1, tile.tileDropChance);
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
             if (t == 1)
             {
                 GameObject newTileDrop = Instantiate(tileDrop, new Vector2(x, y + 1f), Quaternion.identity);
-                newTileDrop.GetComponent<SpriteRenderer>().sprite = worldTileClasses[worldTiles.IndexOf(new Vector2(x, y))].tileSprites[0];
+                newTileDrop.GetComponent<SpriteRenderer>().sprite = tile.tileSprites[0];
             }
             
             worldTileObjects.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
@@ -416,26 +421,26 @@ public class ProceduralGeneration : MonoBehaviour
         }
     }
 
-    public void CheckTile(TileClass tile, int x, int y)
+    public void CheckTile(TileClass tile, int x, int y, bool isNaturallyPlaced)
     {
         if (x >= 0 && x <= worldSize && y >= 0 && y <= worldSize)
         {
             if (!worldTiles.Contains(new Vector2Int(x, y)))
             {
-                PlaceTile(tile, x, y);
+                PlaceTile(tile, x, y, isNaturallyPlaced);
             }
             else
             {
                 if (worldTileClasses[worldTiles.IndexOf(new Vector2Int(x, y))].inBackground)
                 {
                     RemoveTile(x, y);
-                    PlaceTile(tile, x, y);
+                    PlaceTile(tile, x, y, isNaturallyPlaced);
                 }
             }
         }
     }
 
-    public void PlaceTile(TileClass tile, int x, int y)
+    public void PlaceTile(TileClass tile, int x, int y, bool isNaturallyPlaced)
     {
         bool backgroundElement = tile.inBackground;
 
@@ -475,6 +480,7 @@ public class ProceduralGeneration : MonoBehaviour
             newTile.GetComponent<SpriteRenderer>().sprite = tile.tileSprites[spriteIndex];
             newTile.name = tile.tileSprites[0].name;
             newTile.transform.position = new Vector2(x + 0.5f, y + 0.5f);
+            tile.naturallyPlaced = isNaturallyPlaced;
 
             worldTiles.Add(newTile.transform.position - (Vector3.one * 0.5f));
             worldTileObjects.Add(newTile);

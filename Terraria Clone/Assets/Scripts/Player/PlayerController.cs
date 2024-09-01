@@ -53,21 +53,6 @@ public class PlayerController : MonoBehaviour
         float jump = Input.GetAxisRaw("Jump");
         float vertical = Input.GetAxisRaw("Vertical");
 
-
-
-        if (Vector2.Distance(transform.position, mousePos) <= reachRange)
-        {
-            if (hit)
-            {
-                proceduralGenerator.RemoveTile(mousePos.x, mousePos.y);
-            }
-            else if (place)
-            {
-                proceduralGenerator.CheckTile(selectedTile, mousePos.x, mousePos.y);
-            }
-        }
-
-
         Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
         if (horizontal < 0)
         {
@@ -95,6 +80,18 @@ public class PlayerController : MonoBehaviour
     {
         hit = Input.GetMouseButtonDown(0);
         place = Input.GetMouseButton(1);
+
+        if (Vector2.Distance(transform.position, mousePos) <= reachRange)
+        {
+            if (hit)
+            {
+                proceduralGenerator.RemoveTile(mousePos.x, mousePos.y);
+            }
+            else if (place)
+            {
+                proceduralGenerator.CheckTile(selectedTile, mousePos.x, mousePos.y, false);
+            }
+        }
 
         mousePos.x = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).x - 0.5f);
         mousePos.y = Mathf.RoundToInt(cam.ScreenToWorldPoint(Input.mousePosition).y - 0.5f);
