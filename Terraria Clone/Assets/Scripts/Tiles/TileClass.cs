@@ -11,4 +11,14 @@ public class TileClass : ScriptableObject
     public int tileDropChance = 1;
     public bool inBackground = true;
     public bool naturallyPlaced = false;
+
+    public TileClass(TileClass tile, bool isNaturallyPlaced) 
+    {
+        tileName = tile.name;
+        wallVariant = tile.wallVariant;
+        tileSprites = tile.tileSprites;
+        tileDropChance = tile.tileDropChance;
+        inBackground = tile.inBackground;
+        naturallyPlaced = isNaturallyPlaced;
+    }
 }

@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class ProceduralGeneration : MonoBehaviour
 {
+    [Header("Lighting")]
+    public Texture2D worldTilesMap;
+    public Material lightShader;
+    public float lightThreshold;
+    public float lightRadius = 7f;
+    List<Vector2Int> unlitBlocks = new List<Vector2Int>();
+
     public PlayerController player;
     public BiomeClass[] biomes;
     public Camera cam;
@@ -64,6 +71,19 @@ public class ProceduralGeneration : MonoBehaviour
 
     private void Start()
     {
+        worldTilesMap = new Texture2D(worldSize, worldSize);
+        worldTilesMap.filterMode = FilterMode.Point;
+        lightShader.SetTexture("_ShadowTex", worldTilesMap);
+
+        for (int x = 0; x < worldSize; x++)
+        {
+            for (int y = 0; y < worldSize; y++)
+            {
+                worldTilesMap.SetPixel(x, y, Color.white);
+            }
+        }
+        worldTilesMap.Apply();
+
         if (generateRandomSeed)
         {
             seed = Random.Range(-10000, 10000);
@@ -79,11 +99,28 @@ public class ProceduralGeneration : MonoBehaviour
         CreateChunks();
         GenerateTerrain();
         player.Spawn();
+        RefreshChunks();
+
+
+        for (int x = 0; x < worldSize; x++)
+        {
+            for (int y = 0; y < worldSize; y++)
+            {
+                if (worldTilesMap.GetPixel(x, y) == Color.white)
+                {
+                    LightBlock(x, y, 1f, 0);
+                }
+            }
+        }
+
+        worldTilesMap.Apply();
+
 
     }
 
     public void RefreshChunks()
     {
+
         for (int i = 0; i < worldChunks.Length; i++)
         {
             if (Vector2.Distance(new Vector2((i * chunkSize) + (chunkSize / 2), 0), new Vector2(player.transform.position.x, 0)) > cam.orthographicSize * 4f)
@@ -100,6 +137,7 @@ public class ProceduralGeneration : MonoBehaviour
     public void Update()
     {
         RefreshChunks();
+        lightShader.SetTexture("_ShadowTex", worldTilesMap);
     }
 
     public void DrawCaves()
@@ -343,10 +381,10 @@ public class ProceduralGeneration : MonoBehaviour
                         
 
                     }
-
                 
             }
         }
+        worldTilesMap.Apply();
     }
     
     public void GenerateTree(int treeHeight, int x, int y)
@@ -408,6 +446,8 @@ public class ProceduralGeneration : MonoBehaviour
             }
             int t = Random.Range(1, tile.tileDropChance);
             Destroy(worldTileObjects[worldTiles.IndexOf(new Vector2(x, y))]);
+            worldTilesMap.SetPixel(x, y, Color.white);
+            LightBlock(x, y, 1f, 0);
             if (t == 1)
             {
                 GameObject newTileDrop = Instantiate(tileDrop, new Vector2(x, y + 1f), Quaternion.identity);
@@ -418,6 +458,7 @@ public class ProceduralGeneration : MonoBehaviour
             worldTileClasses.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
             worldTiles.RemoveAt(worldTiles.IndexOf(new Vector2(x, y)));
 
+            worldTilesMap.Apply();
         }
     }
 
@@ -427,12 +468,16 @@ public class ProceduralGeneration : MonoBehaviour
         {
             if (!worldTiles.Contains(new Vector2Int(x, y)))
             {
+                //When I commment this RemoveLightSource instance, and the other one below, the game works, but when I don't the game crashes
+                RemoveLightSource(x, y);
                 PlaceTile(tile, x, y, isNaturallyPlaced);
             }
             else
             {
                 if (worldTileClasses[worldTiles.IndexOf(new Vector2Int(x, y))].inBackground)
                 {
+                    //I need to comment this one out, or the game crashes
+                    RemoveLightSource(x, y);
                     RemoveTile(x, y);
                     PlaceTile(tile, x, y, isNaturallyPlaced);
                 }
@@ -474,17 +519,109 @@ public class ProceduralGeneration : MonoBehaviour
             if (tile.name.ToUpper().Contains("WALL"))
             {
                 newTile.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
+                worldTilesMap.SetPixel(x, y, Color.black);
+            }
+            else if (!tile.inBackground)
+            {
+                worldTilesMap.SetPixel(x, y, Color.black);
             }
 
             int spriteIndex = Random.Range(0, tile.tileSprites.Length);
             newTile.GetComponent<SpriteRenderer>().sprite = tile.tileSprites[spriteIndex];
             newTile.name = tile.tileSprites[0].name;
             newTile.transform.position = new Vector2(x + 0.5f, y + 0.5f);
-            tile.naturallyPlaced = isNaturallyPlaced;
+            
+            TileClass newTileClass = new TileClass(tile, isNaturallyPlaced);
 
             worldTiles.Add(newTile.transform.position - (Vector3.one * 0.5f));
             worldTileObjects.Add(newTile);
-            worldTileClasses.Add(tile);
+            worldTileClasses.Add(newTileClass);
         }
     }
+
+    public void LightBlock(int x, int y, float intensity, int iteration)
+    {
+        if (iteration < lightRadius)
+        {
+            worldTilesMap.SetPixel(x, y, Color.white * intensity);
+
+            for (int nx = x - 1; nx < x + 2; nx++)
+            {
+                for (int ny = y - 1; ny < y + 2; ny++)
+                {
+                    if (nx != x || ny != y)
+                    {
+                        float dist = Vector2.Distance(new Vector2(x, y), new Vector2(nx, ny));
+                        float targetIntensity = Mathf.Pow(0.7f, dist) * intensity;
+                        if (worldTilesMap.GetPixel(nx, ny) != null)
+                        {
+                            if (worldTilesMap.GetPixel(nx, ny).r < targetIntensity)
+                            {
+                                LightBlock(nx, ny, targetIntensity, iteration + 1);
+                            }
+                        }
+                    }
+                }
+            }
+            worldTilesMap.Apply();
+        }
+    }
+
+    void RemoveLightSource(int x, int y)
+    {
+        unlitBlocks.Clear();
+        UnLightBlock(x, y, x, y);
+
+        List<Vector2Int> toRelight = new List<Vector2Int>();
+        foreach (Vector2Int block in unlitBlocks)
+        {
+            for (int nx = block.x - 1; nx < block.x + 2; nx++)
+            {
+                for (int ny = block.y - 1; ny < block.y + 2; ny++)
+                {
+                    if (worldTilesMap.GetPixel(nx, ny) != null)
+                    {
+                        if (worldTilesMap.GetPixel(nx, ny).r > worldTilesMap.GetPixel(block.x, block.y).r)
+                        {
+                            if (!toRelight.Contains(new Vector2Int(nx, ny)))
+                                toRelight.Add(new Vector2Int(nx, ny));
+                        }
+                    }
+                }
+            }
+        }
+        foreach (Vector2Int source in toRelight)
+        {
+            LightBlock(source.x, source.y, worldTilesMap.GetPixel(source.x, source.y).r, 0);
+
+        }
+        worldTilesMap.Apply();
+
+    }
+        public void UnLightBlock(int x, int y, int ix, int iy)
+        {
+            if (Mathf.Abs(x - ix) >= lightRadius || Mathf.Abs(y - iy) >= lightRadius || unlitBlocks.Contains(new Vector2Int(x, y)))
+            {
+                return;
+            }
+
+            for(int nx =  x - 1; nx < x + 2; nx++)
+            {
+                for (int ny = y - 1; ny < y + 2; ny++)
+                {
+                    if (nx != x || ny != y)
+                    {
+                        if (worldTilesMap.GetPixel(nx, ny) != null)
+                        {
+                            if (worldTilesMap.GetPixel(nx, ny).r < worldTilesMap.GetPixel(x, y).r)
+                            {
+                                UnLightBlock(nx, ny, ix, iy);
+                            }
+                        }
+                    }
+                }
+            }
+            worldTilesMap.SetPixel(x, y, Color.black);
+            unlitBlocks.Add(new Vector2Int(x, y));
+        }
 }
