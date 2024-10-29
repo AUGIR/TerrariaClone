@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         float jump = Input.GetAxisRaw("Jump");
         float vertical = Input.GetAxisRaw("Vertical");
 
-        Vector2 movement = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        Vector2 movement = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
         if (horizontal < 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        rb.velocity = movement;
+        rb.linearVelocity = movement;
 
     }
 
