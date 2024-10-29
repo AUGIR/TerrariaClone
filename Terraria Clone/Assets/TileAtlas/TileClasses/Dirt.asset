@@ -16,5 +16,6 @@ MonoBehaviour:
   wallVariant: {fileID: 11400000, guid: 29263f68578325045a79ed05e14b53e5, type: 2}
   tileSprites:
   - {fileID: 21300000, guid: 8002f84b8b50b1f4e97d7cd108f1b77c, type: 3}
-  tileDropChance: 1
+  tileDrop: {fileID: 21300000, guid: 8002f84b8b50b1f4e97d7cd108f1b77c, type: 3}
   inBackground: 0
+  naturallyPlaced: 0

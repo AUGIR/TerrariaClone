@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Leaf
   m_EditorClassIdentifier: 
   tileName: leaf
+  wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: 34aecd04a3e7db441b748c5bb77ccb1b, type: 3}
+  tileDrop: {fileID: 21300000, guid: 34aecd04a3e7db441b748c5bb77ccb1b, type: 3}
   inBackground: 1
+  naturallyPlaced: 0

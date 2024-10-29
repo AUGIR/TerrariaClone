@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Log
   m_EditorClassIdentifier: 
   tileName: log
+  wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: b66e93791888028479a96e5c86e148c2, type: 3}
+  tileDrop: {fileID: 21300000, guid: b66e93791888028479a96e5c86e148c2, type: 3}
   inBackground: 1
+  naturallyPlaced: 0

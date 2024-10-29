@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: TallGrass
   m_EditorClassIdentifier: 
   tileName: tallGrass
+  wallVariant: {fileID: 0}
   tileSprites:
   - {fileID: 21300000, guid: 6cba1bc82ac6dd34aa36eeeac0a42aa7, type: 3}
   - {fileID: 21300000, guid: 8090ecdb1e2b1fd4c982f46c4fe5694f, type: 3}
   - {fileID: 21300000, guid: a1dad961d3d46774da9eea4b0a0acff5, type: 3}
   - {fileID: 21300000, guid: 3d42f8f0524d8d943a0fa043246ed689, type: 3}
-  tileDropChance: 10
+  tileDrop: {fileID: 21300000, guid: 6cba1bc82ac6dd34aa36eeeac0a42aa7, type: 3}
   inBackground: 1
+  naturallyPlaced: 0
